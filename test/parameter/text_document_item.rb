@@ -1,5 +1,5 @@
 assert('LSP::Paramter::TextDocumentItem') do
-  test_path = File.expand_path("../../../examples/test.rb", __FILE__)
+  test_path = File.expand_path("../../../examples/example.rb", __FILE__)
   td = LSP::Parameter::TextDocumentItem.new(test_path)
   tmp = td.to_h
   assert_equal "file://" + test_path, tmp['uri']

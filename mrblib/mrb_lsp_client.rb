@@ -2,17 +2,19 @@ module LSP
   class  Client
     JSON_RPC_VERSION = '2.0'
 
-    attr_accessor :recv_buffer
+    attr_accessor :recv_buffer, :request_buffer, :status
     def initialize(command, args = [])
       @server = {:command => command, :args => args}
       @recv_buffer = []
       @request_buffer = {}
       @server_status = nil
       @io = nil
+      @id = 0
+      @status = :stop
     end
 
     def make_id
-      rand(10**12)
+      @id += 1
     end
 
     def recv_message()
@@ -31,6 +33,20 @@ module LSP
         message = JSON.parse(@io.read(headers["Content-Length"]))
       end
       return headers, message
+    end
+
+    def wait_response(id = nil)
+      resp = nil
+      loop do
+        resp = recv_message[1]
+        if id == resp['id'].to_i
+          @request_buffer.delete(id)
+          break
+        else
+          @recv_buffer.push(resp)
+        end
+      end
+      resp
     end
 
     def send_message(message)
@@ -54,23 +70,18 @@ module LSP
       message = create_request_message(method, params)
       id = message['id']
       send_message(message)
-      resp = nil
-      loop do
-        resp = recv_message[1]
-        break  if id == resp['id'].to_i
-        @recv_buffer.push(resp)
-      end
-      if block != nil
+      if block_given?
+        resp = nil
+        resp = wait_response(id)
         block.call(resp)
+        id
       else
-        resp
+        @request_buffer[message['id']] = {
+          :message => message,
+          :block => block
+        }
+        id
       end
-    end
-
-    def send_request_async(method, params)
-      message = create_request_message(method, params)
-      @request_buffer[message['id']] = message
-      send_message(message)
     end
 
     def send_notification(method, params = {})
@@ -87,6 +98,7 @@ module LSP
         command_str = @server[:command] + " " + @server[:args].join(' ')
         @io = IO.popen(command_str, "rb+")
         send_request('initialize', params)
+        @status = :initializing
       end
     end
 
