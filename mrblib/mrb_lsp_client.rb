@@ -97,8 +97,8 @@ module LSP
       if @io == nil
         command_str = @server[:command] + " " + @server[:args].join(' ')
         @io = IO.popen(command_str, "rb+")
-        send_request('initialize', params)
         @status = :initializing
+        send_request('initialize', params)
       end
     end
 
