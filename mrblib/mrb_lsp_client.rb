@@ -93,12 +93,12 @@ module LSP
       send_message(message)
     end
   
-    def start_server(params)
+    def start_server(params, &block)
       if @io == nil
         command_str = @server[:command] + " " + @server[:args].join(' ')
         @io = IO.popen(command_str, "rb+")
         @status = :initializing
-        send_request('initialize', params)
+        send_request('initialize', params, &block)
       end
     end
 
