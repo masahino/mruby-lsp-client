@@ -7,4 +7,5 @@ MRuby::Gem::Specification.new('mruby-lspclient') do |spec|
   spec.add_dependency 'mruby-json'
   spec.add_dependency 'mruby-io'
   spec.add_dependency 'mruby-array-ext'
+  spec.add_dependency 'mruby-hash-ext'
 end
