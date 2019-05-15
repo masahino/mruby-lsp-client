@@ -1,4 +1,4 @@
-MRuby::Gem::Specification.new('mruby-lspclient') do |spec|
+MRuby::Gem::Specification.new('mruby-lsp-client') do |spec|
   spec.license = 'MIT'
   spec.authors = 'masahino'
 
