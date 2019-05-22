@@ -11,6 +11,7 @@ module LSP
       @io = nil
       @id = 0
       @status = :stop
+      @file_version = {}
     end
 
     def make_id
