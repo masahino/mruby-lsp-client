@@ -2,7 +2,7 @@ module LSP
   class  Client
     JSON_RPC_VERSION = '2.0'
 
-    attr_accessor :recv_buffer, :request_buffer, :status
+    attr_accessor :recv_buffer, :request_buffer, :status, :io, :file_version
     def initialize(command, args = [])
       @server = {:command => command, :args => args}
       @recv_buffer = []
@@ -106,6 +106,15 @@ module LSP
     def stop_server
       send_notification("exit")
       Process.kill(15, @io.pid)
+    end
+
+    def cancel_request_with_method(method)
+      @request_buffer.each_pair do |id, v|
+        if v[:message]['method'] == method
+          send_notification('$/cancelParams', {'id' => id})
+          @request_buffer.delete(id)
+        end
+      end
     end
   end
 end
