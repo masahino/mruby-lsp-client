@@ -22,7 +22,7 @@ puts resp
 
 # completion
 resp = client.completion({"textDocument" => LSP::Parameter::TextDocumentIdentifier.new('examples/example.rb'),
-    "position" => {"line" => 5, "character" => 6}}) do |resp|
+    "position" => {"line" => 5, "character" => 2}}) do |resp|
   puts resp
 end
 puts resp

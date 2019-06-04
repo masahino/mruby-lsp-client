@@ -4,23 +4,23 @@ command_options = []
 client = LSP::Client.new(server_command, command_options)
 
 # run server and send initialize
-id = client.start_server({"rootUri"=> "file://" + File.expand_path("..", __FILE__) + "mruby"})
+id = client.start_server({"rootUri"=> "file://" + File.expand_path("..", __FILE__)})
 resp = client.wait_response(id)
 
 client.initialized
 
 # didOpen notification
-client.didOpen({"textDocument" => LSP::Parameter::TextDocumentItem.new('mruby/src/array.c')})
+client.didOpen({"textDocument" => LSP::Parameter::TextDocumentItem.new('examples/example.c')})
 
 # definition
-id = client.definition({"textDocument" => LSP::Parameter::TextDocumentIdentifier.new('mruby/src/array.c'),
+id = client.definition({"textDocument" => LSP::Parameter::TextDocumentIdentifier.new('examples/example.c'),
     "position" => {"line" => 21, "character" => 9}})
 resp = client.wait_response(id)
 puts resp
 
 # completion
-id = client.completion({"textDocument" => LSP::Parameter::TextDocumentIdentifier.new('mruby/src/array.c'),
-    "position" => {"line" => 21, "character" => 9}})
+id = client.completion({"textDocument" => LSP::Parameter::TextDocumentIdentifier.new('examples/example.c'),
+    "position" => {"line" => 0, "character" => 1}})
 resp = client.wait_response(id)
 puts resp
 
