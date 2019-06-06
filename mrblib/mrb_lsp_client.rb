@@ -2,8 +2,8 @@ module LSP
   class  Client
     JSON_RPC_VERSION = '2.0'
 
-    attr_accessor :recv_buffer, :request_buffer, :status, :io, :file_version
-    def initialize(command, args = [])
+    attr_accessor :recv_buffer, :request_buffer, :status, :io, :file_version, :logfile
+    def initialize(command, args = [], logfile = nil)
       @server = {:command => command, :args => args}
       @recv_buffer = []
       @request_buffer = {}
@@ -12,6 +12,10 @@ module LSP
       @id = 0
       @status = :stop
       @file_version = {}
+      @logfile = logfile
+      if @logfile == nil
+        @logfile = "/tmp/mruby_lsp_" + File.basename(command) + ".log"
+      end
     end
 
     def make_id
@@ -97,7 +101,8 @@ module LSP
     def start_server(params, &block)
       if @io == nil
         command_str = @server[:command] + " " + @server[:args].join(' ')
-        @io = IO.popen(command_str, "rb+")
+        log = File.open(@logfile, "w")
+        @io = IO.popen(command_str, "rb+", err: log.fileno)
         @status = :initializing
         send_request('initialize', params, &block)
       end
