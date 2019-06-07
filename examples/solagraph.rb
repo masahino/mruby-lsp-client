@@ -1,7 +1,7 @@
 server_command = "solargraph"
 command_options = ['stdio']
 
-client = LSP::Client.new(server_command, command_options)
+client = LSP::Client.new(server_command, {"args" => command_options})
 
 # run server and send initialize
 id = client.start_server({"rootUri"=> "file://" + File.expand_path("..", __FILE__)})

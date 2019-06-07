@@ -1,11 +1,10 @@
 server_command = "cquery"
-command_options = []
 
-client = LSP::Client.new(server_command, command_options)
+client = LSP::Client.new(server_command,
+  {"initializationOptions" => {"cacheDirectory" => "/tmp/cquery/cache"}})
 
 # run server and send initialize
-id = client.start_server({"rootUri"=> "file://" + File.expand_path("..", __FILE__),
-  "initializationOptions" => {"cacheDirectory" => "/tmp/cquery/cache"}})
+id = client.start_server({"rootUri" => "file://" + File.expand_path("..", __FILE__)})
 resp = client.wait_response(id)
 
 client.initialized

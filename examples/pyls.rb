@@ -1,7 +1,6 @@
 server_command = "pyls"
-command_options = []
 
-client = LSP::Client.new(server_command, command_options)
+client = LSP::Client.new(server_command)
 
 # run server and send initialize
 id = client.start_server({"rootUri"=> "file://" + File.expand_path("..", __FILE__)})
