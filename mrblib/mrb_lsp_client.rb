@@ -3,6 +3,7 @@ module LSP
     JSON_RPC_VERSION = '2.0'
 
     attr_accessor :recv_buffer, :request_buffer, :status, :io, :file_version, :logfile
+    attr_accessor :server
     def initialize(command, options = {})
       args = options["args"]
       if args == nil
@@ -19,7 +20,7 @@ module LSP
       @initializationOptions = options["initializationOptions"]
       @logfile = options["logfile"]
       if @logfile == nil
-        @logfile = "/tmp/mruby_lsp_" + File.basename(command) + ".log"
+        @logfile = "/tmp/mruby_lsp_" + File.basename(command) + "_" + $$.to_s + ".log"
       end
     end
 
@@ -42,6 +43,7 @@ module LSP
       if headers["Content-Length"] != nil
         message = JSON.parse(@io.read(headers["Content-Length"]))
       end
+
       return headers, message
     end
 
