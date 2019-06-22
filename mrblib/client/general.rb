@@ -2,8 +2,7 @@ module LSP
   class  Client
     def initialized(resp = nil)
       if resp != nil
-        @server_capabilities = resp['result']['capabilities']
-        $stderr.puts @server_capabilities
+        @server_capabilities.merge! resp['result']['capabilities']
       end
       send_notification("initialized")
       @status = :running
