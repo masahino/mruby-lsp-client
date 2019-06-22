@@ -21,8 +21,8 @@ puts resp
 
 # completion
 resp = client.completion({"textDocument" => LSP::Parameter::TextDocumentIdentifier.new('examples/example.py'),
-    "position" => {"line" => 5, "character" => 6}}) do |resp|
-  puts resp
+    "position" => {"line" => 0, "character" => 1}}) do |resp|
+  puts resp.to_json
 end
 puts resp
 

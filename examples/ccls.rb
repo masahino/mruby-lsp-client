@@ -1,12 +1,12 @@
-server_command = "clangd"
+server_command = "ccls"
 
 client = LSP::Client.new(server_command)
 
 # run server and send initialize
 id = client.start_server({"rootUri"=> "file://" + File.expand_path("..", __FILE__)})
 resp = client.wait_response(id)
-puts resp
-client.initialized(resp)
+
+client.initialized
 
 # didOpen notification
 client.didOpen({"textDocument" => LSP::Parameter::TextDocumentItem.new('examples/example.c')})

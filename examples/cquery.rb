@@ -6,23 +6,43 @@ client = LSP::Client.new(server_command,
 # run server and send initialize
 id = client.start_server({"rootUri" => "file://" + File.expand_path("..", __FILE__)})
 resp = client.wait_response(id)
+puts resp
 
-client.initialized
+client.initialized(resp)
+sleep(10)
 
 # didOpen notification
 client.didOpen({"textDocument" => LSP::Parameter::TextDocumentItem.new('examples/example.c')})
 
-# definition
-id = client.definition({"textDocument" => LSP::Parameter::TextDocumentIdentifier.new('examples/example.c'),
-    "position" => {"line" => 21, "character" => 9}})
-resp = client.wait_response(id)
-puts resp
-
 # completion
 id = client.completion({"textDocument" => LSP::Parameter::TextDocumentIdentifier.new('examples/example.c'),
-    "position" => {"line" => 0, "character" => 1}})
+    "position" => {"line" => 15, "character" => 3}})
 resp = client.wait_response(id)
+puts "completion"
 puts resp
+
+# signatureHelp
+id = client.signatureHelp({"textDocument" => LSP::Parameter::TextDocumentIdentifier.new('examples/example.c'),
+    "position" => {"line" => 4, "character" => 8}})
+resp = client.wait_response(id)
+puts "signatureHelp"
+puts resp
+
+# hover
+id = client.hover({"textDocument" => LSP::Parameter::TextDocumentIdentifier.new('examples/example.c'),
+    "position" => {"line" => 20, "character" => 8}})
+resp = client.wait_response(id)
+puts "hover"
+puts resp
+
+# definition
+id = client.definition({"textDocument" => LSP::Parameter::TextDocumentIdentifier.new('examples/example.c'),
+    "position" => {"line" => 11, "character" => 20}})
+if id != nil
+  resp = client.wait_response(id)
+  puts "definition"
+  puts resp
+end
 
 client.shutdown
 
