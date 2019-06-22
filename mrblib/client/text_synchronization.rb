@@ -12,5 +12,13 @@ module LSP
       end
       send_notification("textDocument/didChange", params)
     end
+
+    def didSave(params)
+      send_notification("textDocument/didSave", params)
+    end
+
+    def didClose(params)
+      send_notification("textDocument/didClose", params)
+    end
   end
 end

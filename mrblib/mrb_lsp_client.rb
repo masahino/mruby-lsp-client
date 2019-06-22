@@ -3,7 +3,7 @@ module LSP
     JSON_RPC_VERSION = '2.0'
 
     attr_accessor :recv_buffer, :request_buffer, :status, :io, :file_version, :logfile
-    attr_accessor :server
+    attr_accessor :server, :server_capabilities
     def initialize(command, options = {})
       args = options["args"]
       if args == nil
@@ -13,6 +13,7 @@ module LSP
       @recv_buffer = []
       @request_buffer = {}
       @server_status = nil
+      @server_capabilities = {}
       @io = nil
       @id = 0
       @status = :stop
@@ -64,8 +65,12 @@ module LSP
     def send_message(message)
       json_message = message.to_json
       header = "Content-Length: " + json_message.length.to_s + "\r\n\r\n"
-      @io.print header
-      @io.print json_message
+      begin
+        @io.print header
+        @io.print json_message
+      rescue Errno::ESPIPE => e
+        $stderr.puts e
+      end
     end
 
     def create_request_message(method, params)
