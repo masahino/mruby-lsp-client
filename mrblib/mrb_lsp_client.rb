@@ -13,7 +13,7 @@ module LSP
       @recv_buffer = []
       @request_buffer = {}
       @server_status = nil
-      @server_capabilities = {}
+      @server_capabilities = init_server_capabilities
       @io = nil
       @id = 0
       @status = :stop
@@ -23,6 +23,62 @@ module LSP
       if @logfile == nil
         @logfile = "/tmp/mruby_lsp_" + File.basename(command) + "_" + $$.to_s + ".log"
       end
+    end
+
+    def init_server_capabilities
+      {
+        "textDocumentSync" => {
+          "openClose" => false,
+          "change" => 0,
+          "willSave" => false,
+          "willSaveWaitUntil" => false,
+          "save" => {
+            "includeText" => false,
+          }
+        },
+        "hoverProvider" => false,
+        "completionProvider" => {
+          "resolveProvider" => false,
+          "triggerCharacters" => nil,
+        },
+        "signatureHelpProvider" => {
+          "triggerCharacters" => nil
+        },
+        "definitionProvider" => false,
+        "typeDefinitionProvider" => false,
+        "implementationProvider" => false,
+        "referencesProvider" => false,
+        "documentHighlightProvider" => false,
+        "documentSymbolProvider" => false,
+        "workspaceSymbolProvider" => false,
+        "codeActionProvider" => false,
+        "codeLensProvider" => {
+          "resolveProvider" => false,
+        },
+        "documentFormattingProvider" => false,
+        "documentRangeFormattingProvider" => false,
+        "documentOnTypeFormattingProvider" => {
+          "firstTriggerCharacter" => nil,
+          "moreTriggerCharacter" => nil,
+        },
+        "renameProvider" => false,
+        "documentLinkProvider" => {
+          "resolveProvider" => false,
+        },
+        "colorProvider" => false,
+        "foldingRangeProvider" => false,
+        "declarationProvider" => false,
+        "executeCommandProvider" => {
+          "commands" => nil,
+        },
+        "workspace" => {
+          "workspaceFolders" => {
+            "supported" => false,
+            "changeNotifications" => false,
+          }
+        },
+        "experimental" => nil,
+      }
     end
 
     def make_id
@@ -68,8 +124,10 @@ module LSP
       begin
         @io.print header
         @io.print json_message
+        true
       rescue Errno::ESPIPE => e
         $stderr.puts e
+        false
       end
     end
 
@@ -86,8 +144,10 @@ module LSP
     def send_request(method, params = {}, &block)
       message = create_request_message(method, params)
       id = message['id']
-      send_message(message)
-      if block_given?
+      ret = send_message(message)
+      if ret == false
+        nil
+      elsif block_given?
         resp = nil
         resp = wait_response(id)
         block.call(resp)
