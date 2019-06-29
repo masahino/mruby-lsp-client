@@ -126,7 +126,7 @@ module LSP
         @io.print json_message
         true
       rescue Errno::ESPIPE => e
-        $stderr.puts e
+   #     $stderr.puts e
         false
       end
     end
