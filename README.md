@@ -10,6 +10,7 @@ MRuby::Build.new do |conf|
 
     conf.gem :github => 'masahino/mruby-lsp-client'
 end
+```
 
 ## License
 under the MIT License:
