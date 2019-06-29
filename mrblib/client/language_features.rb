@@ -40,6 +40,10 @@ module LSP
       send_request("textDocument/formatting", params, &block)
     end
 
+    def rangeFormatting(params, &block)
+      send_request("textDocument/rangeFormatting", params, &block)
+    end
+
     def rename(params, &block)
       send_request("textDocument/rename", params, &block)
     end
