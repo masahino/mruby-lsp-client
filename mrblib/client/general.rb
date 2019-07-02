@@ -1,7 +1,7 @@
 module LSP
   class  Client
     def initialized(resp = nil)
-      if resp != nil
+      if resp != nil and resp['result'] != nil
         @server_capabilities.merge! resp['result']['capabilities']
       end
       send_notification("initialized")

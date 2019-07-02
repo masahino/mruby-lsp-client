@@ -39,7 +39,7 @@ module LSP
         "hoverProvider" => false,
         "completionProvider" => {
           "resolveProvider" => false,
-          "triggerCharacters" => nil,
+          "triggerCharacters" => [],
         },
         "signatureHelpProvider" => {
           "triggerCharacters" => nil
