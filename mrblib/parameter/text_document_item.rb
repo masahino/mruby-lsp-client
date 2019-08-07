@@ -70,7 +70,11 @@ module LSP
         else
           @version = version
         end
-        @text = File.read(file_path)
+        @text = if File.exist?(file_path) == true
+          File.read(file_path)
+        else
+          ""
+        end
       end
 
       def guess_lang(path)

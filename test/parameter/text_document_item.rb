@@ -7,6 +7,15 @@ assert('LSP::Paramter::TextDocumentItem') do
   assert_equal 1, tmp['version']
 end
 
+assert('LSP::Paramter::TextDocumentItem non exist file') do
+  test_path = File.expand_path("../../../examples/file_not_found.rb", __FILE__)
+  td = LSP::Parameter::TextDocumentItem.new(test_path)
+  tmp = td.to_h
+  assert_equal "file://" + test_path, tmp['uri']
+  assert_equal "ruby", tmp['languageId']
+  assert_equal 1, tmp['version']
+end
+
 assert('LSP::Parameter::TextDocumentItem.guess_lang') do
   td = LSP::Parameter::TextDocumentItem.new(__FILE__)
   assert_equal 'dockerfile', td.guess_lang('Dockerfile')
