@@ -5,6 +5,14 @@ assert('LSP::Paramter::TextDocumentItem') do
   assert_equal "file://" + test_path, tmp['uri']
   assert_equal "ruby", tmp['languageId']
   assert_equal 1, tmp['version']
+
+  test_path = File.expand_path("../../../examples/example.py", __FILE__)
+  td = LSP::Parameter::TextDocumentItem.new(test_path)
+  tmp = td.to_h
+  assert_equal "file://" + test_path, tmp['uri']
+  assert_equal "python", tmp['languageId']
+  assert_equal 1, tmp['version']
+
 end
 
 assert('LSP::Paramter::TextDocumentItem non exist file') do
@@ -23,5 +31,6 @@ assert('LSP::Parameter::TextDocumentItem.guess_lang') do
   assert_equal 'makefile', td.guess_lang('Makefile')
   assert_equal 'bat', td.guess_lang('/foo/bar/hoge.bat')
   assert_equal 'yaml', td.guess_lang('/foo/bar/hoge.yaml')
+  assert_equal 'go', td.guess_lang('/foo/bar/hoge.go')
   assert_equal nil, td.guess_lang('/foo/bar/hoge.xxx')
 end
