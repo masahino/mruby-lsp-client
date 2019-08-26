@@ -61,8 +61,6 @@ module LSP
       def initialize(file_path, language_id = nil, version = nil)
         @uri = 'file://' + File::expand_path(file_path)
         if language_id == nil
-          @languageId = 'ruby'
-        else
           @languageId = guess_lang(file_path)
         end
         if version == nil
