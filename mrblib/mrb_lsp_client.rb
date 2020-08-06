@@ -120,13 +120,13 @@ module LSP
 
     def send_message(message)
       json_message = message.to_json
-      header = "Content-Length: " + json_message.length.to_s + "\r\n\r\n"
+      header = "Content-Length: " + json_message.bytesize.to_s + "\r\n\r\n"
       begin
         @io.print header
         @io.print json_message
         true
       rescue Errno::ESPIPE => e
-   #     $stderr.puts e
+        #$stderr.puts e
         false
       end
     end
