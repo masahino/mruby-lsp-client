@@ -15,6 +15,7 @@ module LSP
         '.cpp' => 'cpp', #C++
         '.cs' => 'csharp', # C#
         '.css' => 'css', # CSS
+        '.cxx' => 'cpp', #C++
         '.diff' => 'diff', # Diff
         '.dart' => 'dart', # Dart
         '.fs' => 'fsharp', # F#
