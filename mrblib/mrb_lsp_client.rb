@@ -21,7 +21,8 @@ module LSP
       @initializationOptions = options["initializationOptions"]
       @logfile = options["logfile"]
       if @logfile == nil
-        @logfile = "/tmp/mruby_lsp_" + File.basename(command) + "_" + $$.to_s + ".log"
+        tmpdir = ENV['TMPDIR'] || ENV['TMP'] || ENV['TEMP'] || ENV['USERPROFILE'] || "/tmp"
+        @logfile = tmpdir + "/mruby_lsp_" + File.basename(command) + "_" + $$.to_s + ".log"
       end
     end
 
