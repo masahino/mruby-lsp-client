@@ -99,17 +99,18 @@ module LSP
     end
 
     def wait_response(id = nil)
-      resp = nil
+      message = nil
       loop do
-        resp = recv_message[1]
-        if id == resp['id'].to_i
+        headers, message = recv_message
+        break if headers == {}
+        if id == message['id'].to_i
           @request_buffer.delete(id)
           break
         else
-          @recv_buffer.push(resp)
+          @recv_buffer.push(message)
         end
       end
-      resp
+      message
     end
 
     def send_message(message)
