@@ -181,7 +181,9 @@ module LSP
     end
 
     def stop_server
-      send_notification('exit')
+      if @status == :running
+        send_notification('exit')
+      end
       Process.kill(15, @io.pid)
     end
 
