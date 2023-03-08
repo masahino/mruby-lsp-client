@@ -1,7 +1,11 @@
 module LSP
-  module CompletionTriggerKind
-    INVOKED = 1
-    TRIGGER_CHARACTER = 2
-    TRIGGER_FOR_INCOMPLETE_COMPLETIONS = 3
+  # How a completion was triggered
+  class CompletionTriggerKind
+    extend Type
+    CONST = {
+      Invoked: 1,
+      TriggerCharacter: 2,
+      TriggerForIncompleteCompletions: 3
+    }.freeze
   end
 end

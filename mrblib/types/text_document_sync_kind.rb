@@ -1,7 +1,10 @@
 module LSP
-  module TextDocumentSyncKind
-    NONE = 0
-    FULL = 1
-    INCREMENTAL = 2
+  class TextDocumentSyncKind
+    extend Type
+    CONST = {
+      None: 0,
+      Full: 1,
+      Incremental: 2
+    }.freeze
   end
 end

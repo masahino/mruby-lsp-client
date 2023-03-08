@@ -1,8 +1,11 @@
 module LSP
-  module DiagnosticSeverity
-    ERROR = 1
-    WARNING = 2
-    INFORMATION = 3
-    HINT = 4
+  class DiagnosticSeverity
+    extend Type
+    CONST = {
+      Error: 1,
+      Warning: 2,
+      Information: 3,
+      Hint: 4
+    }.freeze
   end
 end
