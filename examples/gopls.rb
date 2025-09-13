@@ -30,6 +30,10 @@ resp = client.completion({
 end
 puts resp
 
+id = client.codeLens({"textDocument" => LSP::Parameter::TextDocumentIdentifier.new(rootUri + 'main.go')})
+resp = client.wait_response(id)
+puts resp
+
 client.shutdown
 client.stop_server
 puts "recv buffer"

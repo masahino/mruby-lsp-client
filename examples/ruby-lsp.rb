@@ -1,4 +1,4 @@
-server_command = "solargraph"
+server_command = "ruby-lsp"
 command_options = ['stdio']
 
 client = LSP::Client.new(server_command, {"args" => command_options})
