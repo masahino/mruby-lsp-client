@@ -23,6 +23,11 @@ id = client.completion({"textDocument" => LSP::Parameter::TextDocumentIdentifier
 resp = client.wait_response(id)
 puts resp
 
+# codeLens
+id = client.codeLens({"textDocument" => LSP::Parameter::TextDocumentIdentifier.new('examples/example.c')})
+resp = client.wait_response(id)
+puts resp
+
 client.shutdown
 
 client.stop_server

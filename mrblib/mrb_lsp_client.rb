@@ -25,63 +25,6 @@ module LSP
       @logfile = "#{tmpdir}/mruby_lsp_#{File.basename(command)}_#{$$}.log"
     end
 
-    def init_server_capabilities
-      {
-        # PositionEncoding
-        'textDocumentSync' => {
-          'openClose' => false,
-          'change' => 0,
-          'willSave' => false,
-          'willSaveWaitUntil' => false,
-          'save' => {
-            'includeText' => false
-          }
-        },
-        'hoverProvider' => false,
-        'completionProvider' => {
-          'resolveProvider' => false,
-          'triggerCharacters' => []
-        },
-        'signatureHelpProvider' => {
-          'triggerCharacters' => nil
-        },
-        'definitionProvider' => false,
-        'typeDefinitionProvider' => false,
-        'implementationProvider' => false,
-        'referencesProvider' => false,
-        'documentHighlightProvider' => false,
-        'documentSymbolProvider' => false,
-        'workspaceSymbolProvider' => false,
-        'codeActionProvider' => false,
-        'codeLensProvider' => {
-          'resolveProvider' => false
-        },
-        'documentFormattingProvider' => false,
-        'documentRangeFormattingProvider' => false,
-        'documentOnTypeFormattingProvider' => {
-          'firstTriggerCharacter' => nil,
-          'moreTriggerCharacter' => nil
-        },
-        'renameProvider' => false,
-        'documentLinkProvider' => {
-          'resolveProvider' => false
-        },
-        'colorProvider' => false,
-        'foldingRangeProvider' => false,
-        'declarationProvider' => false,
-        'executeCommandProvider' => {
-          'commands' => nil
-        },
-        'workspace' => {
-          'workspaceFolders' => {
-            'supported' => false,
-            'changeNotifications' => false
-          }
-        },
-        'experimental' => nil
-      }
-    end
-
     def make_id
       @id += 1
     end
@@ -90,12 +33,14 @@ module LSP
       data = ''
       chunk_size = 4096
       bytes_read = 0
+      # buffer = ' ' * chunk_size
       while bytes_read < length
         remaining_length = length - bytes_read
         bytes_to_read = [remaining_length, chunk_size].min
-        chunk = io.read(bytes_to_read)
+        chunk = io.sysread(bytes_to_read)
         raise EOFError, "End of file reached before reading #{length} bytes" if chunk.nil?
-        bytes_read += chunk.length
+
+        bytes_read += chunk.bytesize
         data += chunk
       end
       data
@@ -103,25 +48,33 @@ module LSP
 
     def recv_message
       headers = {}
-      message = ''
+      message = nil
+      data = ''
+      loop do
+        char = @io.sysread(1)
+        raise EOFError, 'end of file reached' if char.nil?
+
+        data << char
+        break if data.end_with?("\r\n\r\n")
+      end
       # Content-Length: ...\r\n
       # Content-type: ...\r\n
       # \r\n
-      while (line = @io.gets)
-        break if line == "\r\n"
-
+      data.each_line do |line|
         k, v = line.chomp.split(':')
         case k
         when 'Content-Length'
           headers[k] = v.to_i
         when 'Content-Type'
           headers[k] = v
-        else
-          return nil, nil
         end
       end
-      # message = JSON.parse(read_message(@io, headers['Content-Length'])) if headers['Content-Length'] != nil
-      message = JSON.parse(@io.read(headers['Content-Length'])) unless headers['Content-Length'].nil?
+      # message = @io.sysread(headers['Content-Length']) unless headers['Content-Length'].nil?
+      unless headers['Content-Length'].nil?
+        message = read_message(@io, headers['Content-Length'])
+        $stderr.puts message if $DEBUG
+        message = JSON.parse(message)
+      end
       [headers, message]
     end
 
@@ -143,7 +96,8 @@ module LSP
 
     def send_message(message)
       json_message = message.to_json
-      header = 'Content-Length: ' + json_message.bytesize.to_s + "\r\n\r\n"
+      header = "Content-Length: #{json_message.bytesize}\r\n\r\n"
+      $stderr.puts json_message if $DEBUG
       begin
         @io.print header
         @io.print json_message
