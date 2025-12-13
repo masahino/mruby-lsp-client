@@ -5,7 +5,7 @@ MRuby::Gem::Specification.new('mruby-lsp-client') do |spec|
   spec.add_dependency 'mruby-random'
   spec.add_dependency 'mruby-os', github: 'masahino/mruby-os'
   spec.add_dependency 'mruby-process', mgem: 'mruby-process2'
-  spec.add_dependency 'mruby-json'
+  spec.add_dependency 'mruby-json', github: 'masahino/mruby-json', branch: 'fix/mruby-3.4-test'
   spec.add_dependency 'mruby-io'
   spec.add_dependency 'mruby-array-ext'
   spec.add_dependency 'mruby-hash-ext'
