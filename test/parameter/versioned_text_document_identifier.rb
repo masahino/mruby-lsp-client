@@ -5,3 +5,10 @@ assert('LSP::Paramter::VersionedTextDocumentIdentifier') do
   assert_equal "file://" + test_path, tmp['uri']
   assert_equal 1, tmp['version']
 end
+
+assert('LSP::Parameter::VersionedTextDocumentIdentifier default version') do
+  test_path = File.expand_path('../../../examples/example.rb', __FILE__)
+  td = LSP::Parameter::VersionedTextDocumentIdentifier.new(test_path)
+
+  assert_equal nil, td.version
+end

@@ -2,6 +2,8 @@ module LSP
   module Parameter
     class TextDocumentItem < Base
       attr_accessor :uri
+      attr_accessor :version
+
       LANGUAGE_ID_FILENAME_MAPPING = {
         'Dockerfile' => 'dockerfile', # Dockerfile
         'Makefile' => 'makefile', # Makefile
