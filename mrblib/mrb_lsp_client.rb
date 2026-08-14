@@ -173,7 +173,7 @@ module LSP
     def cancel_request_with_method(method)
       @request_buffer.each_pair do |id, v|
         if v[:message]['method'] == method
-          send_notification('$/cancelParams', { 'id' => id })
+          send_notification('$/cancelRequest', { 'id' => id })
           @request_buffer.delete(id)
         end
       end

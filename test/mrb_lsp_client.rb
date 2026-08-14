@@ -7,6 +7,31 @@ assert('LSP::Client') do
   assert_equal :initializing, c.status
 end
 
+class LSPClientForCancelRequestTest < LSP::Client
+  attr_reader :notifications
+
+  def initialize
+    super('test')
+    @notifications = []
+  end
+
+  def send_notification(method, params = {})
+    @notifications << [method, params]
+  end
+end
+
+assert('LSP::Client#cancel_request_with_method') do
+  c = LSPClientForCancelRequestTest.new
+  c.request_buffer[1] = { message: { 'method' => 'textDocument/completion' } }
+  c.request_buffer[2] = { message: { 'method' => 'textDocument/hover' } }
+
+  c.cancel_request_with_method('textDocument/completion')
+
+  assert_equal [['$/cancelRequest', { 'id' => 1 }]], c.notifications
+  assert_equal false, c.request_buffer.key?(1)
+  assert_equal true, c.request_buffer.key?(2)
+end
+
 assert('initialize') do
   c = LSP::Client.new('ruby', { 'args' => ["#{File.dirname(__FILE__)}/../misc/dummy_lsp.rb"] })
 
