@@ -19,6 +19,7 @@ module LSP
 
     def didClose(params)
       send_notification('textDocument/didClose', params)
+      @file_version.delete(params['textDocument'].uri)
     end
   end
 end

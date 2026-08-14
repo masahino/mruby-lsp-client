@@ -1,12 +1,12 @@
 assert('LSP::Paramter::TextDocumentItem') do
-  test_path = File.expand_path("../../../examples/example.rb", __FILE__)
+  test_path = File.expand_path('document.rb')
   td = LSP::Parameter::TextDocumentItem.new(test_path)
   tmp = td.to_h
   assert_equal "file://" + test_path, tmp['uri']
   assert_equal "ruby", tmp['languageId']
   assert_equal 1, tmp['version']
 
-  test_path = File.expand_path("../../../examples/example.py", __FILE__)
+  test_path = File.expand_path('document.py')
   td = LSP::Parameter::TextDocumentItem.new(test_path)
   tmp = td.to_h
   assert_equal "file://" + test_path, tmp['uri']
@@ -16,7 +16,7 @@ assert('LSP::Paramter::TextDocumentItem') do
 end
 
 assert('LSP::Paramter::TextDocumentItem non exist file') do
-  test_path = File.expand_path("../../../examples/file_not_found.rb", __FILE__)
+  test_path = File.expand_path('file_not_found.rb')
   td = LSP::Parameter::TextDocumentItem.new(test_path)
   tmp = td.to_h
   assert_equal "file://" + test_path, tmp['uri']
@@ -25,7 +25,7 @@ assert('LSP::Paramter::TextDocumentItem non exist file') do
 end
 
 assert('LSP::Parameter::TextDocumentItem.guess_lang') do
-  td = LSP::Parameter::TextDocumentItem.new(__FILE__)
+  td = LSP::Parameter::TextDocumentItem.new('document.rb')
   assert_equal 'dockerfile', td.guess_lang('Dockerfile')
   assert_equal 'dockerfile', td.guess_lang('/foo/bar/Dockerfile')
   assert_equal 'makefile', td.guess_lang('Makefile')
