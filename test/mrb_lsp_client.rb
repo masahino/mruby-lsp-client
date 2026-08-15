@@ -20,6 +20,24 @@ class LSPClientForCancelRequestTest < LSP::Client
   end
 end
 
+class LSPClientForShutdownTest < LSP::Client
+  attr_reader :requests, :notifications
+
+  def initialize
+    super('test')
+    @requests = []
+    @notifications = []
+  end
+
+  def send_request(method, params = {})
+    @requests << [method, params]
+  end
+
+  def send_notification(method, params = {})
+    @notifications << [method, params]
+  end
+end
+
 assert('LSP::Client#cancel_request_with_method') do
   c = LSPClientForCancelRequestTest.new
   c.request_buffer[1] = { message: { 'method' => 'textDocument/completion' } }
@@ -30,6 +48,32 @@ assert('LSP::Client#cancel_request_with_method') do
   assert_equal [['$/cancelRequest', { 'id' => 1 }]], c.notifications
   assert_equal false, c.request_buffer.key?(1)
   assert_equal true, c.request_buffer.key?(2)
+end
+
+assert('LSP::Client#shutdown sends a request without stopping') do
+  c = LSPClientForShutdownTest.new
+  c.status = :running
+
+  c.shutdown
+
+  assert_equal [['shutdown', {}]], c.requests
+  assert_equal :running, c.status
+end
+
+assert('LSP::Client#exit sends a notification and stops') do
+  c = LSPClientForShutdownTest.new
+  c.status = :running
+
+  c.exit
+
+  assert_equal [['exit', {}]], c.notifications
+  assert_equal :stop, c.status
+end
+
+assert('LSP::Client#stop_server is removed') do
+  c = LSPClientForShutdownTest.new
+
+  assert_equal false, c.respond_to?(:stop_server)
 end
 
 assert('initialize') do

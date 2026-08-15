@@ -10,6 +10,10 @@ module LSP
 
     def shutdown
       send_request('shutdown')
+    end
+
+    def exit
+      send_notification('exit')
       @status = :stop
     end
   end

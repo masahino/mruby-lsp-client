@@ -163,13 +163,6 @@ module LSP
       send_request('initialize', params, &block)
     end
 
-    def stop_server
-      if @status == :running
-        send_notification('exit')
-      end
-      Process.kill(15, @io.pid)
-    end
-
     def cancel_request_with_method(method)
       @request_buffer.each_pair do |id, v|
         if v[:message]['method'] == method
