@@ -14,7 +14,7 @@ module LSP
         '.clj' => 'clojure', #Clojure
         '.coffee' => 'coffeescript', #Coffeescript
         '.c' => 'c', # C
-        '.h' => 'c' # C
+        '.h' => 'c', # C
         '.cpp' => 'cpp', #C++
         '.cc' => 'cpp', #C++
         '.hpp' => 'cpp', #C++
