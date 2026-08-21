@@ -14,7 +14,12 @@ module LSP
         '.clj' => 'clojure', #Clojure
         '.coffee' => 'coffeescript', #Coffeescript
         '.c' => 'c', # C
+        '.h' => 'c' # C
         '.cpp' => 'cpp', #C++
+        '.cc' => 'cpp', #C++
+        '.hpp' => 'cpp', #C++
+        '.hh' => 'cpp', #C++
+        '.hxx' => 'cpp', #C++
         '.cs' => 'csharp', # C#
         '.css' => 'css', # CSS
         '.cxx' => 'cpp', #C++
@@ -25,6 +30,8 @@ module LSP
         '.groovy' => 'groovy', # Groovy
         '.hbs' => 'handlebars', # Handlebars
         '.html' => 'html', # HTML
+        '.htm' => 'html', # HTML
+        '.xhtml' => 'html', # HTML
         '.ini' => 'ini', # Ini
         '.java' => 'java', # Java
         '.js' => 'javascript',# JavaScript
@@ -33,15 +40,18 @@ module LSP
         '.less' => 'less', # Less
         '.lua' => 'lua', # Lua
         '.md' => 'markdown', # Markdown
+        '.markdown' => 'markdown', # Markdown
         '.m' => 'objective-c', # Objective-C
         '.mm' => 'objective-cpp', # Objective-C++
         '.pl' => 'perl', # Perl
+        '.pm' => 'perl', # Perl
         '.p6' => 'perl6', # Perl 6
         '.php' => 'php', # PHP
         '.ps1' => 'powershell', # Powershell
         '.pug' => 'jade', # Pug
         '.py' => 'python', # Python
         '.r' => 'r', # R
+        '.R' => 'r', # R
         '.cshtml' => 'razor', # Razor (cshtml)
         '.rb' => 'ruby', # Ruby
         '.rs' => 'rust', # Rust
@@ -58,6 +68,7 @@ module LSP
         '.xml' => 'xml', # XML
         '.xsl' => 'xsl', # XSL
         '.yaml' => 'yaml', # YAML
+        '.yml' => 'yaml', # YAML
       }
       # Git    git-commit and git-rebase
 
