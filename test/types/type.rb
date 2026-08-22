@@ -17,6 +17,13 @@ assert('LSP::CompletionItemKind') do
   assert_equal :Module, LSP::CompletionItemKind.key(9)
 end
 
+assert('LSP::SymbolKind') do
+  assert_equal nil, LSP::SymbolKind[:unknown]
+  assert_equal 5, LSP::SymbolKind[:Class]
+  assert_equal nil, LSP::SymbolKind.key(99)
+  assert_equal :Function, LSP::SymbolKind.key(12)
+end
+
 assert('LSP::DiagnosticSeverity') do
   assert_equal 1, LSP::DiagnosticSeverity[:Error]
   assert_equal :Information, LSP::DiagnosticSeverity.key(3)
